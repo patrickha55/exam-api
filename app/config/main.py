@@ -22,7 +22,6 @@ def get_settings() -> Settings:
 
 if __name__ == "__main__":
     config = get_settings()
-    print(config)
     print("Configuration Loaded:")
     print(f"{config.app_name}")
     print(f"{config.postgres_url}")
