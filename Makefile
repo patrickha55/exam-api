@@ -4,6 +4,10 @@ docker_compose_file := compose.yaml
 
 .PHONY: config build run dev db
 
+init:
+	@echo "Setting up the virtual environment name 'venv'..."
+	python -m venv venv
+
 config:
 	@echo "Generating configuration files..."
 	${config_script}
