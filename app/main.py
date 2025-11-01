@@ -1,10 +1,22 @@
+import logging
+from logging.config import dictConfig
+import uvicorn
+
 from typing import Any
 from fastapi import FastAPI
-
+from app.config import my_logging_config
 from app.data_access.exam import create_exam, get_exam, get_exams
 from app.dto.exam_input import ExamInput
+from app.dto.question_dto import QuestionDto
+from app.services.exam_service import handle_question_creation
 
-app = FastAPI()
+# Configure basic logging
+dictConfig(my_logging_config.log_config)
+
+# Create a logger instance
+logger = logging.getLogger(__name__)
+
+app = FastAPI(title="Exam API")
 
 
 @app.get("/exams")
@@ -25,14 +37,16 @@ async def exam_post(input: ExamInput) -> dict[str, bool]:
     return {"result": result}
 
 
-# @app.post("/submit")
-# async def submit(answer: Answer) -> bool:
-#     question = [q for q in questions if q.id == answer.exam_id][0]
+@app.post("/questions")
+async def questions(input: QuestionDto) -> Any:
+    try:
+        handle_question_creation(input)
+    except Exception:
+        logger.error("Error handling question creation", exc_info=True)
+        raise
 
-#     if not question:
-#         raise HTTPException(
-#             status_code=404,
-#             detail="No question found."
-#         )
 
-#     return question.correct_answer == answer.answer
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
+    logger.info("Starting Exam API server on http://0.0.0.0:8000")
+    logger.info("Press CTRL+C to stop the server")
