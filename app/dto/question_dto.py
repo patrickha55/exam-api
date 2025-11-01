@@ -1,10 +1,8 @@
 
-from datetime import datetime
 from pydantic import BaseModel
 
 
-class Question(BaseModel):
-    id: int
+class QuestionDto(BaseModel):
     exam_id: int
     name: str
     answer_one: str
@@ -12,6 +10,4 @@ class Question(BaseModel):
     answer_three: str
     answer_four: str
     correct_answer: str
-    is_multi_choices: bool
-    created_at: datetime
-    updated_at: datetime | None
+    is_multi_choices: bool = False
