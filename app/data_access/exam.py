@@ -1,4 +1,3 @@
-import datetime
 from datetime import datetime
 import logging
 from typing import Any
@@ -12,7 +11,7 @@ SETTINGS = get_settings()
 logger = logging.getLogger(__name__)
 
 
-def get_exams() -> Any:
+def get_exams() -> list[Exam]:
     try:
         to_return: list[Exam] = []
         query: str = "SELECT * FROM exam.exams"
@@ -33,6 +32,7 @@ def get_exams() -> Any:
         return to_return
     except Exception:
         logger.error("Error fetching exams", exc_info=True)
+        raise
 
 
 def get_exam(id: int) -> Exam | None:
