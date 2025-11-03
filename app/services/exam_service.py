@@ -8,15 +8,9 @@ from app.dto.question_dto import QuestionDto
 logger = logging.getLogger(__name__)
 
 
-def handle_question_creation(questionDTO: QuestionDto) -> None:
+def handle_question_creation(question_dto: QuestionDto) -> None:
     try:
-        if not questionDTO:
-            raise HTTPException(
-                status_code=400,
-                detail="Invalid payload."
-            )
-
-        exam = get_exam(questionDTO.exam_id)
+        exam = get_exam(question_dto.exam_id)
 
         if exam is None:
             raise HTTPException(
@@ -24,7 +18,7 @@ def handle_question_creation(questionDTO: QuestionDto) -> None:
                 detail="No exam found."
             )
 
-        create_question(questionDTO)
+        create_question(question_dto)
     except Exception:
         logger.error("Error handling question creation", exc_info=True)
         raise

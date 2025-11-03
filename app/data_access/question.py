@@ -60,3 +60,4 @@ def create_question(question: QuestionDto) -> None:
             conn.commit()
     except Exception:
         logger.error("Error creating question", exc_info=True)
+        raise

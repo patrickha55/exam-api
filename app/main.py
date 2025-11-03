@@ -8,6 +8,7 @@ from app.config import my_logging_config
 from app.data_access.exam import create_exam, get_exam, get_exams
 from app.dto.exam_input import ExamInput
 from app.dto.question_dto import QuestionDto
+from app.models.exam import Exam
 from app.services.exam_service import handle_question_creation
 
 # Configure basic logging
@@ -20,13 +21,13 @@ app = FastAPI(title="Exam API")
 
 
 @app.get("/exams")
-async def exams():
+async def exams() -> dict[str, list[Exam]]:
     exams = get_exams()
     return {"exam": exams}
 
 
 @app.get("/exams/{id}")
-async def exam(id: int) -> Any:
+async def exam(id: int) -> dict[str, Exam | None]:
     exam = get_exam(id)
     return {"result": exam}
 
@@ -47,6 +48,6 @@ async def questions(input: QuestionDto) -> Any:
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
     logger.info("Starting Exam API server on http://0.0.0.0:8000")
     logger.info("Press CTRL+C to stop the server")
+    uvicorn.run(app, host="0.0.0.0", port=8000)
