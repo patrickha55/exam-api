@@ -19,12 +19,13 @@ def get_exams() -> list[Exam]:
             rows = conn.execute(query).fetchall()
 
             for row in rows:
+                exam_id: int = row[0]
                 created: datetime = row[2]
 
                 updated: datetime | None = row[3] if row[3] else None
 
-                exam = Exam(id=row[0], name=row[1], created_at=created,
-                            updated_at=updated, questions=[])
+                exam = Exam(id=exam_id, name=row[1], created_at=created,
+                            updated_at=updated, questions=get_questions_by_exam_id(exam_id))
 
                 to_return.append(exam)
 

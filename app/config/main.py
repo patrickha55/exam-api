@@ -2,7 +2,7 @@ from functools import lru_cache
 import os
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-DOTENV = os.path.join("app/", ".env")
+DOTENV = os.path.join(os.path.dirname(__file__), "..", ".env")
 
 
 class Settings(BaseSettings):
