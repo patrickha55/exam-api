@@ -2,7 +2,11 @@ config_script := ./config.sh
 docker_env := app/db.env
 docker_compose_file := compose.yaml
 
-.PHONY: config build run dev
+.PHONY: config build run dev db
+
+init:
+	@echo "Setting up the virtual environment name 'venv'..."
+	python -m venv venv
 
 config:
 	@echo "Generating configuration files..."
@@ -16,6 +20,10 @@ build: config
 
 dev:
 	fastapi dev app/main.py
+
+db: config
+	@echo "Starting the database in detached mode..."
+	docker compose --env-file ${docker_env} -f ${docker_compose_file} up -d db
 
 clean:
 	docker compose down
